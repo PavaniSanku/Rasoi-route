@@ -1,0 +1,16 @@
+{
+  "passed": [
+    "Bundled frontend loads over HTTP",
+    "Bundled JavaScript asset is served",
+    "Trusted catalog loads",
+    "Register account",
+    "Sign in using saved account",
+    "Create exact \u20b9579.16 COD order with PAYMENT DUE",
+    "Repeated request returns same order",
+    "Retrieve stable saved receipt",
+    "Unauthenticated receipt access denied",
+    "Order history is scoped to account",
+    "Account and order persist after application restart"
+  ],
+  "count": 11
+}

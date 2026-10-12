@@ -1,0 +1,9 @@
+FROM node:22-alpine AS build
+RUN corepack enable && corepack prepare pnpm@10.28.0 --activate
+WORKDIR /app
+COPY . .
+RUN pnpm install --frozen-lockfile && pnpm typecheck:libs && pnpm --dir artifacts/rasoi-route typecheck && pnpm --dir artifacts/rasoi-route test && pnpm --dir artifacts/rasoi-route build
+FROM nginx:1.28-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/artifacts/rasoi-route/dist/public /usr/share/nginx/html
+EXPOSE 80

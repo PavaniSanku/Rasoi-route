@@ -1,0 +1,22 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "node scripts/preinstall.cjs",
+    "build": "pnpm typecheck:libs && pnpm --dir artifacts/rasoi-route typecheck && pnpm --dir artifacts/rasoi-route build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "pnpm typecheck:libs && pnpm --dir artifacts/rasoi-route typecheck",
+    "test": "pnpm --dir artifacts/rasoi-route test",
+    "preview:demo": "node scripts/preview.cjs"
+  },
+  "private": true,
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.3"
+  },
+  "packageManager": "pnpm@10.28.0"
+}

@@ -1,0 +1,284 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: menu
+    description: Menu catalog
+  - name: orders
+    description: Server-validated Indian food orders and billing
+  - name: education
+    description: Demonstrations for concurrency and performance analysis
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /health:
+    get:
+      operationId: getApiHealth
+      tags: [health]
+      summary: API health
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /menu:
+    get:
+      operationId: getMenu
+      tags: [menu]
+      summary: Get the current menu
+      responses:
+        "200":
+          description: Menu items with authoritative rupee prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FoodItem"
+  /orders/calculate:
+    post:
+      operationId: calculateOrder
+      tags: [orders]
+      summary: Calculate an order without saving it
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "200":
+          description: Authoritative bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "422":
+          description: Invalid order or coupon
+  /orders:
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Save an order and calculate its bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Saved order with its authoritative bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "422":
+          description: Invalid order or coupon
+  /orders/{orderId}/bill:
+    post:
+      operationId: getOrderBill
+      tags: [orders]
+      summary: Recalculate a saved order's bill
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Current authoritative bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Order not found
+  /orders/{orderId}/coupon:
+    post:
+      operationId: applyOrderCoupon
+      tags: [orders]
+      summary: Apply a coupon to a saved order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CouponInput"
+      responses:
+        "200":
+          description: Updated authoritative bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Order not found
+        "422":
+          description: Invalid coupon
+  /delivery/availability:
+    get:
+      operationId: checkDeliveryAvailability
+      tags: [education]
+      summary: Demonstrate concurrent delivery availability checks
+      parameters:
+        - name: postalCode
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 6
+            maxLength: 6
+      responses:
+        "200":
+          description: Availability result from the educational async example
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryAvailability"
+  /performance/benchmark:
+    get:
+      operationId: runBillingBenchmark
+      tags: [education]
+      summary: Measure billing computation at increasing order sizes
+      responses:
+        "200":
+          description: Measured local benchmark timings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BenchmarkResult"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    FoodItem:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        category:
+          type: string
+          enum: [Biryani, Starters, South Indian, North Indian, Chinese, Desserts, Beverages]
+        price: { type: number, format: double }
+        description: { type: string }
+        imageUrl: { type: string, format: uri }
+      required: [id, name, category, price, description, imageUrl]
+    OrderItemInput:
+      type: object
+      properties:
+        itemId: { type: string, minLength: 1 }
+        quantity: { type: integer, minimum: 1, maximum: 99 }
+      required: [itemId, quantity]
+    OrderInput:
+      type: object
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/OrderItemInput"
+        coupon: { type: string, maxLength: 20 }
+      required: [items]
+    CouponInput:
+      type: object
+      properties:
+        coupon: { type: string, minLength: 1, maxLength: 20 }
+      required: [coupon]
+    BillLine:
+      type: object
+      properties:
+        itemId: { type: string }
+        name: { type: string }
+        quantity: { type: integer }
+        unitPrice: { type: number, format: double }
+        total: { type: number, format: double }
+      required: [itemId, name, quantity, unitPrice, total]
+    Bill:
+      type: object
+      properties:
+        orderId: { type: string }
+        createdAt: { type: string, format: date-time }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillLine"
+        subtotal: { type: number, format: double }
+        discount: { type: number, format: double }
+        discountLabel: { type: string }
+        delivery: { type: number, format: double }
+        deliveryLabel: { type: string }
+        gst: { type: number, format: double }
+        total: { type: number, format: double }
+        coupon: { type: ["string", "null"] }
+      required:
+        - orderId
+        - createdAt
+        - items
+        - subtotal
+        - discount
+        - discountLabel
+        - delivery
+        - deliveryLabel
+        - gst
+        - total
+        - coupon
+    DeliveryAvailability:
+      type: object
+      properties:
+        postalCode: { type: string }
+        available: { type: boolean }
+        estimatedMinutes: { type: integer }
+        checksCompleted: { type: integer }
+        detail: { type: string }
+      required: [postalCode, available, estimatedMinutes, checksCompleted, detail]
+    BenchmarkMeasurement:
+      type: object
+      properties:
+        itemCount: { type: integer }
+        elapsedMilliseconds: { type: number, format: double }
+      required: [itemCount, elapsedMilliseconds]
+    BenchmarkResult:
+      type: object
+      properties:
+        measurements:
+          type: array
+          items:
+            $ref: "#/components/schemas/BenchmarkMeasurement"
+        complexity: { type: string }
+        note: { type: string }
+      required: [measurements, complexity, note]
+

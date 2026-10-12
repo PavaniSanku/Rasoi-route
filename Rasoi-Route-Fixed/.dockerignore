@@ -1,0 +1,10 @@
+**/node_modules
+**/target
+**/dist
+**/data
+.env
+.env.*
+!.env.example
+.git
+*.zip
+*.log
