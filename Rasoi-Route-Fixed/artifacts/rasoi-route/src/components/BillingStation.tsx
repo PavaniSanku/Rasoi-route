@@ -153,7 +153,7 @@ export function BillingStation({
   isSubmitting = false,
 }: BillingStationProps) {
   // Billing Configuration States
-  const [activeTab, setActiveTab] = useState<"summary" | "decomposition">("summary");
+  const [activeTab, setActiveTab] = useState<"summary" | "calculation">("summary");
   const [deliveryTier, setDeliveryTier] = useState<"standard" | "priority" | "eco">("standard");
   const [ecoPackaging, setEcoPackaging] = useState(true);
   const [noCutlery, setNoCutlery] = useState(true);
@@ -1117,10 +1117,10 @@ export function BillingStation({
           </div>
         </div>
 
-        {/* Right Column: Sticky Cost Ledger & Decomposition Tab */}
+        {/* Right Column: Sticky Cost Ledger */}
         <div className="sticky top-24 space-y-4">
           <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg space-y-4">
-            {/* Tab Switcher: Summary vs Computational Decomposition */}
+            {/* Tab Switcher: Summary vs Calculation */}
             <div className="flex rounded-2xl bg-gray-100 p-1 text-xs font-bold">
               <button
                 type="button"
@@ -1137,15 +1137,15 @@ export function BillingStation({
 
               <button
                 type="button"
-                onClick={() => setActiveTab("decomposition")}
+                onClick={() => setActiveTab("calculation")}
                 className={`flex-1 rounded-xl py-2 transition flex items-center justify-center gap-1.5 ${
-                  activeTab === "decomposition"
+                  activeTab === "calculation"
                     ? "bg-white text-gray-900 shadow-xs"
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
                 <Code2 size={14} />
-                <span>Math Audit</span>
+                <span>Bill Calculation</span>
               </button>
             </div>
 
@@ -1269,12 +1269,12 @@ export function BillingStation({
                 </div>
               </div>
             ) : (
-              /* TAB 2: Computational Decomposition & Decimal Math Audit */
+              /* TAB 2: Bill Calculation Details */
               <div className="space-y-4 text-xs">
                 <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 space-y-2.5">
                   <p className="font-extrabold text-sm text-gray-900 flex items-center gap-1.5">
                     <Layers size={15} className="text-orange-600" />
-                    Computational Formula
+                    Bill Calculation
                   </p>
                   <p className="font-mono text-[11px] bg-white p-2.5 rounded-xl border border-gray-200 text-orange-950 overflow-x-auto">
                     Total = (Subtotal − Discounts) + Delivery + Packaging + Platform + GST(5%) + Tip

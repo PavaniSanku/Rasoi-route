@@ -8,14 +8,11 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
-  Code2,
   FileCheck2,
   FileText,
   Filter,
   Heart,
   HelpCircle,
-  Layers,
-  MapPin,
   Minus,
   PartyPopper,
   Percent,
@@ -24,7 +21,6 @@ import {
   QrCode,
   Receipt,
   RotateCcw,
-  ShieldCheck,
   ShoppingBag,
   Sparkles,
   Tag,
@@ -50,7 +46,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "An Indian food-delivery application needs to process an order containing multiple food items, calculate the subtotal, apply discounts, calculate delivery charges and taxes, and finally generate the bill. Apply decomposition and abstraction to this problem.",
+          "Order authentic Indian food, customize your selections, and enjoy a simple checkout with clear billing.",
       },
     ],
   }),
@@ -266,7 +262,6 @@ function ModernFoodApp() {
   const [coupon, setCoupon] = useState("WELCOME50");
 
   // Modals & Final Placed Order State
-  const [showDefenceModal, setShowDefenceModal] = useState(false);
   const [showTaxInvoiceModal, setShowTaxInvoiceModal] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [placedOrderBill, setPlacedOrderBill] = useState<FinalCalculatedBill | null>(null);
@@ -451,24 +446,10 @@ function ModernFoodApp() {
               </div>
             </div>
 
-            {/* Delivery Location Pill */}
-            <div className="hidden md:flex items-center gap-2 rounded-full bg-gray-100/80 px-3.5 py-1.5 text-xs text-gray-700 font-medium">
-              <MapPin size={14} className="text-orange-500" />
-              <span>College demo • <strong>Enter your address at checkout</strong></span>
-            </div>
           </div>
 
           {/* Right Controls: Stage navigation & cart summary */}
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setShowDefenceModal(true)}
-              className="flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50/80 px-3.5 py-1.5 text-xs font-bold text-orange-800 hover:bg-orange-100 transition shadow-xs"
-            >
-              <Code2 size={14} className="text-orange-600" />
-              <span className="hidden sm:inline">Project Defence &</span> Decomposition
-            </button>
-
             {/* Cart Button */}
             {stage === "menu" ? (
               <button
@@ -509,22 +490,16 @@ function ModernFoodApp() {
         </div>
       </nav>
 
-      {/* 2. Top Banner Header (Decomposition & Abstraction Context) */}
+      {/* Top Banner Header */}
       <header className="mx-auto max-w-7xl px-4 sm:px-8 pt-6">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 p-6 sm:p-7 text-white shadow-lg">
           <div className="relative z-10 max-w-3xl space-y-2.5">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-              <ShieldCheck size={14} /> Computational Thinking & Dedicated Billing Engine
-            </div>
-
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
               Indian Food-Delivery Order & Billing System
             </h1>
 
             <p className="text-xs sm:text-sm text-orange-50/95 leading-relaxed font-normal bg-black/15 p-3.5 rounded-2xl border border-white/10 backdrop-blur-xs">
-              &ldquo;An Indian food-delivery application needs to process an order containing multiple food items,
-              calculate the subtotal, apply discounts, calculate delivery charges and taxes, and finally generate the bill.
-              Apply decomposition and abstraction to this problem.&rdquo;
+              Discover delicious Indian food, customize your order, enjoy great offers, and get a clear bill with taxes included.
             </p>
 
             {/* Stepper Progress Bar */}
@@ -534,7 +509,7 @@ function ModernFoodApp() {
               </span>
               <span>&rarr;</span>
               <span className={`rounded-lg px-2.5 py-1 font-mono ${stage === "billing" ? "bg-white/30 text-white font-bold" : "bg-white/15"}`}>
-                2. Dedicated Billing Station
+                2. Review Your Order
               </span>
               <span>&rarr;</span>
               <span className={`rounded-lg px-2.5 py-1 font-mono ${stage === "confirmed" ? "bg-white/30 text-white font-bold" : "bg-white/15"}`}>
@@ -739,44 +714,8 @@ function ModernFoodApp() {
                 Your order has been recorded!
               </h2>
               <p className="mt-2 text-sm text-gray-600 max-w-md mx-auto">
-                Thank you{placedOrderBill.customerName ? `, ${placedOrderBill.customerName}` : ""}! This college demonstration records orders; it does not dispatch meals or riders.
+                Thank you{placedOrderBill.customerName ? `, ${placedOrderBill.customerName}` : ""}! Your order details are below.
               </p>
-            </div>
-
-            {/* Live Status Tracker Bar */}
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-5 text-left">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                  Demonstration Order Flow
-                </p>
-                <span className="text-xs font-mono font-bold text-orange-600">
-                  No live dispatch connected
-                </span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="space-y-1">
-                  <div className="size-8 mx-auto rounded-full bg-emerald-600 text-white grid place-items-center font-bold">
-                    ✓
-                  </div>
-                  <p className="font-bold text-gray-900">Order Placed</p>
-                  <p className="text-[11px] text-gray-500 font-mono">{placedOrderBill.orderId}</p>
-                </div>
-                <div className="space-y-1">
-                  <div className="size-8 mx-auto rounded-full bg-orange-500 text-white grid place-items-center font-bold animate-pulse">
-                    🍳
-                  </div>
-                  <p className="font-bold text-gray-900">In Kitchen</p>
-                  <p className="text-[11px] text-gray-500">Demo step</p>
-                </div>
-                <div className="space-y-1">
-                  <div className="size-8 mx-auto rounded-full bg-gray-200 text-gray-400 grid place-items-center font-bold">
-                    🛵
-                  </div>
-                  <p className="font-medium text-gray-500">Rider Dispatched</p>
-                  <p className="text-[11px] text-gray-400">Not connected</p>
-                </div>
-              </div>
             </div>
 
             {/* Receipt Summary Card */}
@@ -918,69 +857,6 @@ function ModernFoodApp() {
         />
       )}
 
-      {/* 6. Computational Thinking & Decomposition Modal */}
-      {showDefenceModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
-            <button
-              type="button"
-              onClick={() => setShowDefenceModal(false)}
-              className="absolute top-5 right-5 size-8 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center"
-            >
-              <X size={16} />
-            </button>
-
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600">
-              <Code2 size={16} />
-              <span>Project Defence Framework</span>
-            </div>
-
-            <h3 className="mt-1 text-2xl font-black text-gray-900">
-              Decomposition & Abstraction Applied
-            </h3>
-
-            <div className="mt-4 space-y-4 text-xs text-gray-700 max-h-[70vh] overflow-y-auto pr-2">
-              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 space-y-2">
-                <p className="font-extrabold text-sm text-gray-900 flex items-center gap-1.5">
-                  <Layers size={15} className="text-orange-600" />
-                  1. Problem Decomposition (6 Sub-Problems)
-                </p>
-                <ol className="list-decimal list-inside space-y-1.5 leading-relaxed font-medium">
-                  <li><strong>Multiple Food Items Resolution:</strong> Resolves dish IDs from menu dictionary in O(1) time.</li>
-                  <li><strong>Subtotal Calculation:</strong> Evaluates &Sigma;(price &times; quantity) in linear O(n) time using Decimal arithmetic.</li>
-                  <li><strong>Apply Discounts:</strong> Strategy pattern compares Tiered rules (10-20%) vs Coupons (`WELCOME50`, `SAVE10`, `FESTIVE20`, `FIRSTBITE`, `STUDENT15`).</li>
-                  <li><strong>Delivery Charges:</strong> Order value bands + speed tiers (Standard, Priority +₹25, Eco -₹10).</li>
-                  <li><strong>Calculate Taxes:</strong> Pure function applying 5% Indian composite GST (2.5% CGST + 2.5% SGST).</li>
-                  <li><strong>Generate Final Bill & Invoice:</strong> Uses the saved server Bill object and saved demonstration receipt.</li>
-                </ol>
-              </div>
-
-              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 space-y-2">
-                <p className="font-extrabold text-sm text-gray-900 flex items-center gap-1.5">
-                  <ShieldCheck size={15} className="text-orange-600" />
-                  2. Abstraction Applied
-                </p>
-                <ul className="list-disc list-inside space-y-1.5 leading-relaxed font-medium">
-                  <li><strong>Data Abstraction:</strong> Domain models `FoodItem`, `OrderInput`, `BillLine`, and `Bill` encapsulate data representation.</li>
-                  <li><strong>Algorithmic Abstraction:</strong> The backend `BillingService` abstract distinct mathematical algorithms behind uniform interfaces.</li>
-                  <li><strong>Boundary Abstraction:</strong> Client only selects food items; authoritative financial arithmetic is completely abstracted inside the backend.</li>
-                </ul>
-              </div>
-
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-emerald-900 text-xs font-semibold flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
-                <span>Run the included test suite to verify billing behavior.</span>
-              </div>
-            </div>
-
-            <div className="mt-5 pt-3 border-t border-gray-100 flex justify-end">
-              <Button onClick={() => setShowDefenceModal(false)} className="rounded-xl px-5 bg-gray-900 text-white text-xs">
-                Close & Return to App
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
     </>
   );

@@ -1,7 +1,7 @@
 kind = "web"
 previewPath = "/"
 title = "Rasoi Route"
-description = "A polished Indian food ordering and billing app with a complete menu, cart, coupon flow, server-calculated invoice, and computational-thinking defence pages."
+description = "A polished Indian food ordering and billing app with a complete menu, cart, coupon flow, and server-calculated invoice."
 version = "1.0.0"
 id = "artifacts/rasoi-route"
 router = "path"
